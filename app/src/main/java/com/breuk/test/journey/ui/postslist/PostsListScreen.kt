@@ -59,8 +59,11 @@ fun PostsListScreen(navController: NavController, viewModel: PostsListViewModel 
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 10.dp),
-                    value = "",
-                    onValueChange = {}) //TODO add search
+                    value = viewModel.searchText.value,
+                    onValueChange = { text -> viewModel.doSearchPosts(text) },
+                    placeholder = {
+                        Text(text = stringResource(R.string.search_posts))
+                    })
 
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     if (state.posts.isEmpty()) {

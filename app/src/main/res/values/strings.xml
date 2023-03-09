@@ -3,5 +3,6 @@
     <string name="json_placeholder_db">json_placeholder_db</string>
     <string name="no_posts_found">No Posts Found</string>
     <string name="no_comments_found">No Comments Found</string>
-
+    <string name="search_posts">Search posts</string>
+    <string name="search_comments">Search comments</string>
 </resources>

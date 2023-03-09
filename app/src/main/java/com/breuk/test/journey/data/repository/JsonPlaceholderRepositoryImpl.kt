@@ -47,10 +47,20 @@ class JsonPlaceholderRepositoryImpl(
         }
     }
 
+    override fun searchPosts(text: String): Flow<Task<List<Post>>> = flow {
+        val posts = if (text.isEmpty()) {
+            dao.getPosts().map { it.toPost() }
+        } else {
+            dao.searchPosts(text).map { it.toPost() }
+        }
+
+        emit(Task.Success(data = posts))
+    }
+
     override fun getComments(postId: Int): Flow<Task<List<Comment>>> = flow {
         emit(Task.Loading())
 
-        val localComments = dao.getCommentsForPost(postId).map { it.toComment() }
+        val localComments = dao.getCommentsFromPost(postId).map { it.toComment() }
         emit(Task.Loading(data = localComments))
 
         runCatching {
@@ -62,5 +72,15 @@ class JsonPlaceholderRepositoryImpl(
         }.onFailure { error ->
             emit(Task.Error(exception = error, data = localComments))
         }
+    }
+
+    override fun searchComments(postId: Int, text: String): Flow<Task<List<Comment>>> = flow {
+        val comments = if (text.isEmpty()) {
+            dao.getCommentsFromPost(postId).map { it.toComment() }
+        } else {
+            dao.searchCommentsFromPost(postId, text).map { it.toComment() }
+        }
+
+        emit(Task.Success(data = comments))
     }
 }

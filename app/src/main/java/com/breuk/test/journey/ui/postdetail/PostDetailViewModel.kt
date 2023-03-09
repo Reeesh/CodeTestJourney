@@ -5,13 +5,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.breuk.test.journey.core.util.SEARCH_DELAY
 import com.breuk.test.journey.core.util.Task
 import com.breuk.test.journey.domain.model.Comment
 import com.breuk.test.journey.domain.model.Post
 import com.breuk.test.journey.domain.usecase.GetComments
 import com.breuk.test.journey.domain.usecase.GetPost
+import com.breuk.test.journey.domain.usecase.SearchComments
 import com.breuk.test.journey.navigation.ARG_POST_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
@@ -23,7 +27,8 @@ import javax.inject.Inject
 class PostDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getComments: GetComments,
-    private val getPost: GetPost
+    private val getPost: GetPost,
+    private val searchComments: SearchComments
 ) : ViewModel() {
     private val postId = savedStateHandle.get<String>(ARG_POST_ID).orEmpty()
 
@@ -32,6 +37,9 @@ class PostDetailViewModel @Inject constructor(
 
     private val viewModelEvent = MutableSharedFlow<PostDetailEvent>()
     val event = viewModelEvent.asSharedFlow()
+
+    private val viewModelSearchText = mutableStateOf("")
+    val searchText: State<String> = viewModelSearchText
 
     init {
         parsePostId()
@@ -119,6 +127,28 @@ class PostDetailViewModel @Inject constructor(
                             )
                         )
                     }
+                }
+            }.launchIn(this)
+        }
+    }
+
+    private var searchQuery: Job? = null
+    fun doSearchComments(text: String) {
+        viewModelSearchText.value = text
+        searchQuery?.cancel()
+        searchQuery = viewModelScope.launch {
+            delay(SEARCH_DELAY)
+            val searchText = "%$text%"
+            searchComments(postId.toInt(), searchText).onEach { task ->
+                when (task) {
+                    is Task.Success -> {
+                        viewModelState.value = state.value.copy(
+                            comments = task.data ?: emptyList()
+                        )
+                    }
+
+                    is Task.Loading -> {}
+                    is Task.Error -> {}
                 }
             }.launchIn(this)
         }

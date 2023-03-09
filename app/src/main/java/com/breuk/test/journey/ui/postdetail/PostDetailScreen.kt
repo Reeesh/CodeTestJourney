@@ -4,9 +4,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -62,6 +63,15 @@ fun PostDetailScreen(
             if (state.isLoadingComments) {
                 LoadingIndicator()
             } else {
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp),
+                    value = viewModel.searchText.value,
+                    onValueChange = { text -> viewModel.doSearchComments(text) },
+                    placeholder = {
+                        Text(text = stringResource(R.string.search_comments))
+                    })
                 LazyColumn(modifier = Modifier.weight(0.3f)) {
                     if (state.comments.isEmpty()) {
                         item {
@@ -75,7 +85,7 @@ fun PostDetailScreen(
                             )
                         }
                     } else {
-                        itemsIndexed(state.comments) { index, comment ->
+                        items(state.comments) { comment ->
                             CommentsListItem(comment = comment)
                         }
                     }

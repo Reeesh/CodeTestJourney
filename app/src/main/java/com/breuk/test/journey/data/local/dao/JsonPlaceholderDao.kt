@@ -16,6 +16,9 @@ interface JsonPlaceholderDao {
     @Query("SELECT * FROM postentity")
     suspend fun getPosts(): List<PostEntity>
 
+    @Query("SELECT * FROM postentity WHERE body LIKE :text OR title LIKE :text")
+    suspend fun searchPosts(text: String): List<PostEntity>
+
     @Query("SELECT * FROM postentity WHERE id = :id")
     suspend fun getPostById(id: Int): PostEntity
 
@@ -27,7 +30,10 @@ interface JsonPlaceholderDao {
     suspend fun insertComments(comments: List<CommentEntity>)
 
     @Query("SELECT * FROM commententity WHERE postId = :postId")
-    suspend fun getCommentsForPost(postId: Int): List<CommentEntity>
+    suspend fun getCommentsFromPost(postId: Int): List<CommentEntity>
+
+    @Query("SELECT * FROM commententity WHERE postId = :postId AND (body LIKE :text OR name LIKE :text OR email LIKE :text)")
+    suspend fun searchCommentsFromPost(postId: Int, text: String): List<CommentEntity>
 
     @Query("DELETE FROM commententity WHERE id in (:ids)")
     suspend fun deleteComments(ids: List<Int>)
