@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.breuk.test.journey.core.util.Task
 import com.breuk.test.journey.domain.model.Post
 import com.breuk.test.journey.domain.usecase.GetPosts
+import com.breuk.test.journey.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -66,6 +67,12 @@ class PostsListViewModel @Inject constructor(
         }
     }
 
+    fun showDetail(id: Int) {
+        viewModelScope.launch {
+            viewModelEvent.emit(PostsListEvent.Navigate(Screen.PostDetail.withId(id)))
+        }
+    }
+
     data class PostsListScreenState(
         val posts: List<Post> = emptyList(),
         val isLoading: Boolean = false
@@ -73,5 +80,6 @@ class PostsListViewModel @Inject constructor(
 
     sealed class PostsListEvent {
         data class ShowError(val message: String) : PostsListEvent()
+        data class Navigate(val route: String) : PostsListEvent()
     }
 }

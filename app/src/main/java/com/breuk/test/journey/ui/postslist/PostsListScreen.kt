@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.breuk.test.journey.R
+import com.breuk.test.journey.core.ui.LoadingIndicator
 import com.breuk.test.journey.core.ui.PostListItem
 import kotlinx.coroutines.flow.collectLatest
 
@@ -38,6 +39,10 @@ fun PostsListScreen(navController: NavController, viewModel: PostsListViewModel 
                         message = event.message
                     )
                 }
+
+                is PostsListViewModel.PostsListEvent.Navigate -> {
+                    navController.navigate(event.route)
+                }
             }
         }
     }
@@ -46,40 +51,44 @@ fun PostsListScreen(navController: NavController, viewModel: PostsListViewModel 
         modifier = Modifier.padding(horizontal = 20.dp),
         scaffoldState = scaffoldState
     ) { padding ->
-        Column(modifier = Modifier.padding(padding)) {
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 10.dp),
-                value = "",
-                onValueChange = {}) //TODO add search
+        if (state.isLoading) {
+            LoadingIndicator()
+        } else {
+            Column(modifier = Modifier.padding(padding)) {
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp),
+                    value = "",
+                    onValueChange = {}) //TODO add search
 
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                if (state.posts.isEmpty()) {
-                    item {
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 20.dp),
-                            text = stringResource(R.string.no_posts_found),
-                            fontSize = 14.sp,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                } else {
-                    itemsIndexed(state.posts) { index, post ->
-                        if (index != 0) {
-                            Divider(
-                                modifier = Modifier.fillMaxWidth(),
-                                color = Color.Gray
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    if (state.posts.isEmpty()) {
+                        item {
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 20.dp),
+                                text = stringResource(R.string.no_posts_found),
+                                fontSize = 14.sp,
+                                textAlign = TextAlign.Center
                             )
                         }
-                        PostListItem(
-                            post = post,
-                            onPostPressed = {
-                                //TODO show detail
+                    } else {
+                        itemsIndexed(state.posts) { index, post ->
+                            if (index != 0) {
+                                Divider(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    color = Color.Gray
+                                )
                             }
-                        )
+                            PostListItem(
+                                post = post,
+                                onPostPressed = { id ->
+                                    viewModel.showDetail(id)
+                                }
+                            )
+                        }
                     }
                 }
             }
