@@ -8,7 +8,7 @@ import com.breuk.test.journey.data.local.entity.PostEntity
 
 @Database(
     entities = [PostEntity::class, CommentEntity::class],
-    version = 2
+    version = 3
 )
 abstract class JsonPlaceholderDatabase : RoomDatabase() {
     abstract val dao: JsonPlaceholderDao

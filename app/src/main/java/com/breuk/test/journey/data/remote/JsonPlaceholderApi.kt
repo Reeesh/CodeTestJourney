@@ -14,7 +14,7 @@ interface JsonPlaceholderApi {
     @GET("https://jsonplaceholder.typicode.com/posts")
     suspend fun getPosts(): List<Post>
 
-    @GET("https://jsonplaceholder.typicode.com/posts/")
+    @GET("https://jsonplaceholder.typicode.com/posts/{postId}")
     suspend fun getPost(@Path("postId") postId: Int): Post
 
     @GET("https://jsonplaceholder.typicode.com/comments")

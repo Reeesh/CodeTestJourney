@@ -13,9 +13,9 @@ import androidx.compose.ui.unit.sp
 import com.breuk.test.journey.domain.model.Post
 
 @Composable
-fun PostListItem(post: Post, onPostPressed: (Int) -> Unit) {
+fun PostListItem(modifier: Modifier = Modifier, post: Post, onPostPressed: (Int) -> Unit) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .clickable(onClick = { onPostPressed(post.id) })
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 10.dp),

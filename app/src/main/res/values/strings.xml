@@ -2,4 +2,6 @@
     <string name="app_name">CodeTestJourney</string>
     <string name="json_placeholder_db">json_placeholder_db</string>
     <string name="no_posts_found">No Posts Found</string>
+    <string name="no_comments_found">No Comments Found</string>
+
 </resources>

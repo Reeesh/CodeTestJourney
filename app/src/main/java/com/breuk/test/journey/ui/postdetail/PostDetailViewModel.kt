@@ -42,8 +42,8 @@ class PostDetailViewModel @Inject constructor(
             postId.toInt()
         }.onSuccess { id ->
             viewModelScope.launch {
-                launch { doGetComments(id) }
                 launch { doGetPost(id) }
+                launch { doGetComments(id) }
             }
         }.onFailure { error ->
             viewModelScope.launch {
