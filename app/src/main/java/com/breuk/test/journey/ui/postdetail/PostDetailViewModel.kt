@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.breuk.test.journey.domain.model.Comment
 import com.breuk.test.journey.domain.model.Post
 import com.breuk.test.journey.navigation.ARG_POST_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,6 +30,7 @@ class PostDetailViewModel @Inject constructor(
 
     data class PostDetailScreenState(
         val post: Post? = null,
+        val comments: List<Comment> = emptyList(),
         val isLoading: Boolean = false
     )
 
