@@ -17,16 +17,16 @@ class JsonPlaceholderRepositoryImpl(
         emit(Task.Loading())
 
         val localPosts = dao.getPosts().map { it.toPost() }
-        emit(Task.Loading(localPosts))
+        emit(Task.Loading(data = localPosts))
 
         runCatching {
             api.getPosts()
         }.onSuccess { posts ->
-            dao.deletePosts()
+            dao.deletePosts(posts.map { it.id })
             dao.insertPosts(posts.map { it.toPostEntity() })
-            emit(Task.Success(posts))
+            emit(Task.Success(data = posts))
         }.onFailure { error ->
-            emit(Task.Error(exception = error))
+            emit(Task.Error(exception = error, data = localPosts))
         }
     }
 }

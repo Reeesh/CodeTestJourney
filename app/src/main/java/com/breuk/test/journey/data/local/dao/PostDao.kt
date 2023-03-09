@@ -15,6 +15,6 @@ interface PostDao {
     @Query("SELECT * FROM postentity")
     suspend fun getPosts(): List<PostEntity>
 
-    @Query("DELETE FROM postentity")
-    suspend fun deletePosts()
+    @Query("DELETE FROM postentity WHERE id in (:ids)")
+    suspend fun deletePosts(ids: List<Int>)
 }
