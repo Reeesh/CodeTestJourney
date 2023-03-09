@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">CodeTestJourney</string>
     <string name="post_db">post_db</string>
+    <string name="no_posts_found">No Posts Found</string>
 </resources>

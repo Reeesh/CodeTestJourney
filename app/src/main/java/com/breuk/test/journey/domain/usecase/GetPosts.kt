@@ -1,8 +1,8 @@
 package com.breuk.test.journey.domain.usecase
 
+import com.breuk.test.journey.core.util.Task
 import com.breuk.test.journey.domain.model.Post
 import com.breuk.test.journey.domain.repository.JsonPlaceholderRepository
-import com.breuk.test.journey.util.Task
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package com.breuk.test.journey.util
+package com.breuk.test.journey.core.util
 
 sealed class Task<T>(val data: T? = null, val exception: Throwable? = null) {
     class Loading<T>(data: T? = null) : Task<T>(data)

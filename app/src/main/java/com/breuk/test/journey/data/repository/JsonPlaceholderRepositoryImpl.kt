@@ -1,10 +1,10 @@
 package com.breuk.test.journey.data.repository
 
+import com.breuk.test.journey.core.util.Task
 import com.breuk.test.journey.data.local.dao.PostDao
 import com.breuk.test.journey.data.remote.JsonPlaceholderApi
 import com.breuk.test.journey.domain.model.Post
 import com.breuk.test.journey.domain.repository.JsonPlaceholderRepository
-import com.breuk.test.journey.util.Task
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

@@ -4,15 +4,16 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.breuk.test.journey.core.util.Task
 import com.breuk.test.journey.domain.model.Post
 import com.breuk.test.journey.domain.usecase.GetPosts
-import com.breuk.test.journey.util.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -23,8 +24,8 @@ class PostsListViewModel @Inject constructor(
     private val viewModelState = mutableStateOf(PostsListScreenState())
     val state: State<PostsListScreenState> = viewModelState
 
-    private val viewModelNavEvent = MutableSharedFlow<PostsListEvent>()
-    val navEvent = viewModelNavEvent.asSharedFlow()
+    private val viewModelEvent = MutableSharedFlow<PostsListEvent>()
+    val event = viewModelEvent.asSharedFlow()
 
     init {
         doGetPosts()
@@ -53,7 +54,8 @@ class PostsListViewModel @Inject constructor(
                             posts = task.data ?: emptyList(),
                             isLoading = false
                         )
-                        viewModelNavEvent.emit(
+                        Timber.e(task.exception)
+                        viewModelEvent.emit(
                             PostsListEvent.ShowError(
                                 task.exception?.message ?: "Something went wrong, try again"
                             )
