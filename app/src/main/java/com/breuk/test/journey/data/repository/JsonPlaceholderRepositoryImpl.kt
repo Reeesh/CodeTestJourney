@@ -13,6 +13,22 @@ class JsonPlaceholderRepositoryImpl(
     private val api: JsonPlaceholderApi,
     private val dao: JsonPlaceholderDao
 ) : JsonPlaceholderRepository {
+    override fun getPost(postId: Int): Flow<Task<Post>> = flow {
+        emit(Task.Loading())
+
+        val localPost = dao.getPostById(postId).toPost()
+        emit(Task.Loading(data = localPost))
+
+        runCatching {
+            api.getPost(postId)
+        }.onSuccess { post ->
+            dao.deletePosts(listOf(post.id))
+            dao.insertPosts(listOf(post.toPostEntity()))
+            emit(Task.Success(data = post))
+        }.onFailure { error ->
+            emit(Task.Error(exception = error, data = localPost))
+        }
+    }
 
     override fun getPosts(): Flow<Task<List<Post>>> = flow {
         emit(Task.Loading())

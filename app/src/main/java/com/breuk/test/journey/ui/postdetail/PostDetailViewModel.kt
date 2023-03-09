@@ -6,6 +6,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.breuk.test.journey.domain.model.Comment
 import com.breuk.test.journey.domain.model.Post
+import com.breuk.test.journey.domain.usecase.GetComments
+import com.breuk.test.journey.domain.usecase.GetPost
 import com.breuk.test.journey.navigation.ARG_POST_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -14,7 +16,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostDetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val getComments: GetComments,
+    private val getPost: GetPost
 ) : ViewModel() {
     private val postId = savedStateHandle.get<String>(ARG_POST_ID).orEmpty()
 

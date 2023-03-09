@@ -3,6 +3,7 @@ package com.breuk.test.journey.data.remote
 import com.breuk.test.journey.domain.model.Comment
 import com.breuk.test.journey.domain.model.Post
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface JsonPlaceholderApi {
@@ -12,6 +13,9 @@ interface JsonPlaceholderApi {
 
     @GET("https://jsonplaceholder.typicode.com/posts")
     suspend fun getPosts(): List<Post>
+
+    @GET("https://jsonplaceholder.typicode.com/posts/")
+    suspend fun getPost(@Path("postId") postId: Int): Post
 
     @GET("https://jsonplaceholder.typicode.com/comments")
     suspend fun getComments(@Query("postId") postId: Int): List<Comment>

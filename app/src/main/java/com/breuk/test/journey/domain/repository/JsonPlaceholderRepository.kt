@@ -6,6 +6,7 @@ import com.breuk.test.journey.domain.model.Post
 import kotlinx.coroutines.flow.Flow
 
 interface JsonPlaceholderRepository {
+    fun getPost(postId: Int): Flow<Task<Post>>
     fun getPosts(): Flow<Task<List<Post>>>
     fun getComments(postId: Int): Flow<Task<List<Comment>>>
 }
