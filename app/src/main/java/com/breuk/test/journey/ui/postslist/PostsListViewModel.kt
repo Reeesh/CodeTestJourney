@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -55,7 +54,6 @@ class PostsListViewModel @Inject constructor(
                             posts = task.data ?: emptyList(),
                             isLoading = false
                         )
-                        Timber.e(task.exception)
                         viewModelEvent.emit(
                             PostsListEvent.ShowError(
                                 task.exception?.message ?: "Something went wrong, try again"
